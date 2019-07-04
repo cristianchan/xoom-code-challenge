@@ -11,8 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.example.xoomcodechallenge.MainActivity.CountryListener;
+import static java.util.Objects.isNull;
 
 public class CountriesAsyncTask2 extends AsyncTask<Void, Void, List<Country>> {
     private final Context context;
@@ -32,13 +34,17 @@ public class CountriesAsyncTask2 extends AsyncTask<Void, Void, List<Country>> {
         try {
             JSONArray items = jsonObject.getJSONArray("items");
 
-            for(int i = 0; i < items.length(); i++){
+            for (int i = 0; i < items.length(); i++) {
                 final JSONObject jsonObject = items.getJSONObject(i);
                 final String slug = jsonObject.getString("code");
                 final String name = jsonObject.getString("name");
-                final Country country = new Country(slug,name,null ,false);
+                final Country country = countryDao.getCountryBySlug(slug);
 
-                countryDao.insert(country);
+                if(country == null){
+                    final Country newCountry = new Country(slug, name, null, false);
+                    countryDao.insert(newCountry);
+
+                }
             }
 
         } catch (JSONException e) {
@@ -48,7 +54,7 @@ public class CountriesAsyncTask2 extends AsyncTask<Void, Void, List<Country>> {
     }
 
     @Override
-    protected void onPostExecute(final List<Country> countries){
+    protected void onPostExecute(final List<Country> countries) {
         this.countryListener.onSuccess(countries);
     }
 }

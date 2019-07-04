@@ -9,8 +9,18 @@
         tools:context=".MainActivity">
     <TextView
             android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="410dp"
+            android:background="@drawable/border"
+            android:layout_height="52dp"
+            android:gravity="center_vertical"
             android:id="@+id/nameTextView"
-            android:layout_weight="1"/>
+            android:layout_weight="1" android:textSize="18sp"/>
+    <ImageButton
+            android:id="@+id/favorite_button"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:src="@android:drawable/btn_star"
+            android:layout_alignParentBottom="true"
+            android:paddingRight="13dp"
+            android:background="@drawable/border"/>
 </LinearLayout>

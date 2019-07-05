@@ -9,7 +9,7 @@ import java.util.List;
 
 @Dao
 public interface CountryDao {
-    @Query("SELECT * FROM country ORDER BY favorite , name")
+    @Query("SELECT * FROM country ORDER BY favorite desc, name")
     List<Country> getAll();
 
     @Query("SELECT * FROM country WHERE slug = :slug ")

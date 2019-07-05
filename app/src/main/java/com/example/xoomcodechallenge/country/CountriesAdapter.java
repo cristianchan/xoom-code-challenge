@@ -41,7 +41,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
     public void onBindViewHolder(@NonNull final CountriesViewHolder holder, int position) {
         final Country country = countries.get(position);
 
-        if (!country.isFavorite()) {
+        if (country.isFavorite()) {
             holder.favBtn.setImageResource(R.drawable.ic_favorite);
         } else {
             holder.favBtn.setImageResource(R.drawable.ic_favorite_border_black_24dp);

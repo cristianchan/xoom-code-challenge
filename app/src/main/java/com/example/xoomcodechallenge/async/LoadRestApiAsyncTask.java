@@ -16,12 +16,12 @@ import java.util.Optional;
 import static com.example.xoomcodechallenge.MainActivity.CountryListener;
 import static java.util.Objects.isNull;
 
-public class CountriesAsyncTask2 extends AsyncTask<Void, Void, List<Country>> {
+public class LoadRestApiAsyncTask extends AsyncTask<Void, Void, List<Country>> {
     private final Context context;
     private final CountryListener countryListener;
     private final JSONObject jsonObject;
 
-    public CountriesAsyncTask2(final Context context, CountryListener countryListener, JSONObject jsonObject) {
+    public LoadRestApiAsyncTask(final Context context, CountryListener countryListener, JSONObject jsonObject) {
         this.context = context;
         this.countryListener = countryListener;
         this.jsonObject = jsonObject;

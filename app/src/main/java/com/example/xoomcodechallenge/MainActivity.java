@@ -9,17 +9,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.xoomcodechallenge.async.CountriesAsyncTask;
-import com.example.xoomcodechallenge.async.CountriesAsyncTask2;
+import com.example.xoomcodechallenge.async.LoadCountriesDBAsyncTask;
+import com.example.xoomcodechallenge.async.LoadRestApiAsyncTask;
 import com.example.xoomcodechallenge.country.CountriesAdapter;
-import com.example.xoomcodechallenge.db.AppDatabase;
 import com.example.xoomcodechallenge.db.Country;
-import com.example.xoomcodechallenge.db.CountryDao;
-import com.example.xoomcodechallenge.db.DatabaseConfig;
 import com.example.xoomcodechallenge.service.VolleyQueue;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -39,17 +33,18 @@ public class MainActivity extends Activity {
         final RecyclerView countryRecyclerView = findViewById(R.id.countriesRecyclerView);
         countryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        countriesAdapter = new CountriesAdapter(new ArrayList<Country>());
+        countriesAdapter = new CountriesAdapter(new ArrayList<Country>(), getApplicationContext(), countryListener);
         countryRecyclerView.setAdapter(countriesAdapter);
 
-        final CountriesAsyncTask countriesAsyncTask = new CountriesAsyncTask(getApplicationContext(), countryListener);
+        final LoadCountriesDBAsyncTask loadCountriesDBAsyncTask = new LoadCountriesDBAsyncTask(getApplicationContext(), countryListener);
 
-        countriesAsyncTask.execute();
+        loadCountriesDBAsyncTask.execute();
 
         final RequestQueue requestQueue = VolleyQueue.getRequestQueue(getApplicationContext());
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, "https://mobile.xoom.com/catalog/v2/countries", null, success, error);
 
         requestQueue.add(jsonObjectRequest);
+
     }
 
     private CountryListener countryListener = new CountryListener() {
@@ -63,9 +58,8 @@ public class MainActivity extends Activity {
     private Response.Listener<JSONObject> success = new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
-            final CountriesAsyncTask2 countriesAsyncTask2 = new CountriesAsyncTask2(getApplicationContext(), countryListener, response);
-
-            countriesAsyncTask2.execute();
+            final LoadRestApiAsyncTask loadRestApiAsyncTask = new LoadRestApiAsyncTask(getApplicationContext(), countryListener, response);
+            loadRestApiAsyncTask.execute();
         }
     };
 

@@ -8,13 +8,17 @@ import org.jetbrains.annotations.NotNull;
 public class Country {
     @PrimaryKey
     @NotNull
-    final String slug;
+    private String slug;
 
-    final String name;
+    private String name;
 
-    final String flagPath;
+    private String flagPath;
 
-    final Boolean favorite;
+    private Boolean favorite;
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
+    }
 
     public Country(String slug, String name, String flagPath, Boolean favorite) {
         this.slug = slug;
@@ -35,7 +39,8 @@ public class Country {
         return flagPath;
     }
 
-    public Boolean getFavorite() {
+    public Boolean isFavorite() {
         return favorite;
     }
+
 }

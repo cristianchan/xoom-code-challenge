@@ -11,11 +11,11 @@ import java.util.List;
 
 import static com.example.xoomcodechallenge.MainActivity.CountryListener;
 
-public class CountriesAsyncTask extends AsyncTask<Void, Void, List<Country>> {
+public class LoadCountriesDBAsyncTask extends AsyncTask<Void, Void, List<Country>> {
     private final Context context;
     private final CountryListener countryListener;
 
-    public CountriesAsyncTask(final Context context, CountryListener countryListener) {
+    public LoadCountriesDBAsyncTask(final Context context, CountryListener countryListener) {
         this.context = context;
         this.countryListener = countryListener;
     }

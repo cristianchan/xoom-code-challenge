@@ -10,21 +10,19 @@
         tools:context=".MainActivity">
     <ImageView
             android:id="@+id/flag"
-            android:layout_width="92dp"
-            android:layout_height="62dp"
+            android:layout_width="91dp"
+            android:layout_height="57dp"
             android:padding="5dp"/>
     <TextView
             android:layout_width="410dp"
-            android:background="@drawable/border"
-            android:layout_height="62dp"
+            android:layout_height="57dp"
             android:gravity="center_vertical"
             android:id="@+id/nameTextView"
-            android:layout_weight="1" android:textSize="24sp"/>
+            android:layout_weight="1" android:textSize="18sp"/>
     <ImageView
             android:id="@+id/favBtn"
-            android:background="@drawable/border"
             android:paddingEnd="12dp"
-            android:src="@drawable/ic_favorite_border_black_24dp"
+            android:src="@drawable/star_outline"
             android:layout_width="50dp"
-            android:layout_height="62dp"/>
+            android:layout_height="57dp"/>
 </LinearLayout>

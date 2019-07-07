@@ -45,9 +45,9 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
         final Country country = countries.get(position);
 
         if (country.isFavorite()) {
-            holder.favBtn.setImageResource(R.drawable.ic_favorite);
+            holder.favBtn.setImageResource(R.drawable.star);
         } else {
-            holder.favBtn.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            holder.favBtn.setImageResource(R.drawable.star_outline);
         }
 
         Picasso.with(context).load(String.format(FLAG_URL, country.getSlug().toLowerCase())).into(holder.flag);
@@ -56,11 +56,6 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
         holder.favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!country.isFavorite()) {
-                    holder.favBtn.setImageResource(R.drawable.ic_favorite);
-                } else {
-                    holder.favBtn.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                }
                 final UpdateCountryFavoriteAsyncTask updateCountryFavoriteAsyncTask = new UpdateCountryFavoriteAsyncTask(context, countryListener, country.getSlug());
                 updateCountryFavoriteAsyncTask.execute();
             }

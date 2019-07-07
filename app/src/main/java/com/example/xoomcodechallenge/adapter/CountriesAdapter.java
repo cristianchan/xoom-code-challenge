@@ -1,4 +1,4 @@
-package com.example.xoomcodechallenge.country;
+package com.example.xoomcodechallenge.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

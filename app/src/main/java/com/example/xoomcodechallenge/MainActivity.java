@@ -11,9 +11,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.xoomcodechallenge.async.LoadCountriesDBAsyncTask;
 import com.example.xoomcodechallenge.async.LoadRestApiAsyncTask;
-import com.example.xoomcodechallenge.country.CountriesAdapter;
+import com.example.xoomcodechallenge.adapter.CountriesAdapter;
 import com.example.xoomcodechallenge.db.Country;
-import com.example.xoomcodechallenge.service.VolleyQueue;
+import com.example.xoomcodechallenge.volley.VolleyQueue;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

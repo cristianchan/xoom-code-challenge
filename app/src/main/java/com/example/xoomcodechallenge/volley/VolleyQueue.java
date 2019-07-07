@@ -1,4 +1,4 @@
-package com.example.xoomcodechallenge.service;
+package com.example.xoomcodechallenge.volley;
 
 import android.content.Context;
 import com.android.volley.RequestQueue;

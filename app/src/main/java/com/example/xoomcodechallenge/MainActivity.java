@@ -22,13 +22,14 @@ import java.util.List;
 import static com.android.volley.Request.Method.GET;
 
 public class MainActivity extends Activity {
+    private static String COUNTRIES_URL = "https://mobile.xoom.com/catalog/v2/countries";
+
     private CountriesAdapter countriesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         final RecyclerView countryRecyclerView = findViewById(R.id.countriesRecyclerView);
         countryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -41,7 +42,7 @@ public class MainActivity extends Activity {
         loadCountriesDBAsyncTask.execute();
 
         final RequestQueue requestQueue = VolleyQueue.getRequestQueue(getApplicationContext());
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, "https://mobile.xoom.com/catalog/v2/countries", null, success, error);
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, COUNTRIES_URL, null, success, error);
 
         requestQueue.add(jsonObjectRequest);
 

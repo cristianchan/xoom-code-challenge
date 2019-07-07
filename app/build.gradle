@@ -47,4 +47,5 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:$android_x_version"
     implementation "androidx.room:room-runtime:$android_x_2_version"
     annotationProcessor "androidx.room:room-compiler:$android_x_2_version"
+    implementation 'com.squareup.picasso:picasso:2.4.0'
 }

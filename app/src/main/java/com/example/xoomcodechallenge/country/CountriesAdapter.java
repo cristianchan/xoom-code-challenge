@@ -11,12 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.xoomcodechallenge.R;
 import com.example.xoomcodechallenge.async.UpdateCountryFavoriteAsyncTask;
 import com.example.xoomcodechallenge.db.Country;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import static com.example.xoomcodechallenge.MainActivity.CountryListener;
 
 public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.CountriesViewHolder> {
+    private static String FLAG_URL = "https://www.countryflags.io/%s/flat/64.png";
+
     private final List<Country> countries;
     private final Context context;
     private final CountryListener countryListener;
@@ -47,6 +50,8 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
             holder.favBtn.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
 
+        Picasso.with(context).load(String.format(FLAG_URL, country.getSlug().toLowerCase())).into(holder.flag);
+
         holder.nameTextView.setText(country.getName());
         holder.favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,11 +80,13 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
     public class CountriesViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTextView;
         private ImageView favBtn;
+        private ImageView flag;
 
         public CountriesViewHolder(@NonNull View itemView) {
             super(itemView);
             this.nameTextView = itemView.findViewById(R.id.nameTextView);
             this.favBtn = itemView.findViewById(R.id.favBtn);
+            this.flag = itemView.findViewById(R.id.flag);
         }
     }
 }

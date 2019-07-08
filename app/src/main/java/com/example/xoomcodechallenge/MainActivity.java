@@ -9,10 +9,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.xoomcodechallenge.async.LoadCountriesDBAsyncTask;
 import com.example.xoomcodechallenge.async.LoadRestApiAsyncTask;
 import com.example.xoomcodechallenge.adapter.CountriesAdapter;
 import com.example.xoomcodechallenge.db.Country;
+import com.example.xoomcodechallenge.service.CountryService;
 import com.example.xoomcodechallenge.volley.VolleyQueue;
 import org.json.JSONObject;
 
@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
     private static String COUNTRIES_URL = "https://mobile.xoom.com/catalog/v2/countries";
 
     private CountriesAdapter countriesAdapter;
+    private CountryService countryService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +35,9 @@ public class MainActivity extends Activity {
         final RecyclerView countryRecyclerView = findViewById(R.id.countriesRecyclerView);
         countryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        countryService = new CountryService(getApplicationContext());
         countriesAdapter = new CountriesAdapter(new ArrayList<Country>(), getApplicationContext(), countryListener);
         countryRecyclerView.setAdapter(countriesAdapter);
-
-        final LoadCountriesDBAsyncTask loadCountriesDBAsyncTask = new LoadCountriesDBAsyncTask(getApplicationContext(), countryListener);
-
-        loadCountriesDBAsyncTask.execute();
 
         final RequestQueue requestQueue = VolleyQueue.getRequestQueue(getApplicationContext());
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, COUNTRIES_URL, null, success, error);
@@ -68,6 +66,8 @@ public class MainActivity extends Activity {
         @Override
         public void onErrorResponse(VolleyError error) {
             Log.e("volley", error.getMessage());
+            final LoadRestApiAsyncTask loadRestApiAsyncTask = new LoadRestApiAsyncTask(getApplicationContext(), countryListener, null);
+            loadRestApiAsyncTask.execute();
         }
     };
 

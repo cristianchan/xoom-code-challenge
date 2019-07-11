@@ -3,33 +3,28 @@ package com.example.xoomcodechallenge.response;
 import java.util.List;
 
 public class CountryResponse {
-
-    public List<DisbursementOption> getDisbursementOptions() {
-        return disbursementOptions;
-    }
-
-    public void setDisbursementOptions(List<DisbursementOption> disbursementOptions) {
-        this.disbursementOptions = disbursementOptions;
-    }
-
     private String code;
     private String name;
     private List<DisbursementOption> disbursementOptions;
 
-    public CountryResponse(String code, String name, List<DisbursementOption> disbursementOptions) {
+    public CountryResponse(final String code, final String name, final List<DisbursementOption> disbursementOptions) {
         this.code = code;
         this.name = name;
         this.disbursementOptions = disbursementOptions;
     }
 
-    private static class DisbursementOption{
-        private Boolean mode;
+    public List<DisbursementOption> getDisbursementOptions() {
+        return disbursementOptions;
+    }
 
-        private DisbursementOption(Boolean mode) {
+    public static class DisbursementOption {
+        private String mode;
+
+        private DisbursementOption(final String mode) {
             this.mode = mode;
         }
 
-        public Boolean getMode() {
+        public String getMode() {
             return mode;
         }
     }

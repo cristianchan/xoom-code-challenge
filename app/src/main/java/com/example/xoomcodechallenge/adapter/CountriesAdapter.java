@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.xoomcodechallenge.R;
 import com.example.xoomcodechallenge.async.UpdateCountryFavoriteAsyncTask;
 import com.example.xoomcodechallenge.db.Country;
+import com.example.xoomcodechallenge.service.CountryService;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,13 +24,18 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
     private final List<Country> countries;
     private final Context context;
     private final CountryListener countryListener;
+    private final CountryService countryService;
+
+    private  UpdateCountryFavoriteAsyncTask updateCountryFavoriteAsyncTask;
 
     public CountriesAdapter(final List<Country> countries,
                             final Context applicationContext,
-                            final CountryListener countryListener) {
+                            final CountryListener countryListener,
+                            final CountryService countryService) {
         this.context = applicationContext;
         this.countries = countries;
         this.countryListener = countryListener;
+        this.countryService = countryService;
     }
 
     @NonNull
@@ -56,8 +62,8 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
         holder.favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final UpdateCountryFavoriteAsyncTask updateCountryFavoriteAsyncTask = new UpdateCountryFavoriteAsyncTask(context, countryListener, country.getSlug());
-                updateCountryFavoriteAsyncTask.execute();
+                updateCountryFavoriteAsyncTask = new UpdateCountryFavoriteAsyncTask(countryService, countryListener);
+                updateCountryFavoriteAsyncTask.execute(country.getSlug());
             }
         });
     }

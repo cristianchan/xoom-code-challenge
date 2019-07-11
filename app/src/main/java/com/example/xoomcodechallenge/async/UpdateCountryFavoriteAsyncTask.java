@@ -1,36 +1,25 @@
 package com.example.xoomcodechallenge.async;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import com.example.xoomcodechallenge.MainActivity;
-import com.example.xoomcodechallenge.db.AppDatabase;
 import com.example.xoomcodechallenge.db.Country;
-import com.example.xoomcodechallenge.db.CountryDao;
-import com.example.xoomcodechallenge.db.DatabaseConfig;
+import com.example.xoomcodechallenge.service.CountryService;
 
 import java.util.List;
 
-public class UpdateCountryFavoriteAsyncTask extends AsyncTask<Void, Void, List<Country>> {
-    private final Context context;
+public class UpdateCountryFavoriteAsyncTask extends AsyncTask<String, Void, List<Country>> {
+    private final CountryService countryService;
     private final MainActivity.CountryListener countryListener;
-    private final String slug;
 
-    public UpdateCountryFavoriteAsyncTask(final Context context, final MainActivity.CountryListener countryListener, final String slug) {
-        this.context = context;
+    public UpdateCountryFavoriteAsyncTask(final CountryService countryService, final MainActivity.CountryListener countryListener) {
+        this.countryService = countryService;
         this.countryListener = countryListener;
-        this.slug = slug;
     }
 
     @Override
-    protected List<Country> doInBackground(Void... voids) {
-        final AppDatabase database = DatabaseConfig.getDatabase(context);
-        final CountryDao countryDao = database.countryDao();
-        final Country country = countryDao.getCountryBySlug(slug);
-
-        country.setFavorite(!country.isFavorite());
-        countryDao.update(country);
-
-        return countryDao.getAll();
+    protected List<Country> doInBackground(String... strings) {
+        final String slug = strings[0];
+        return countryService.updateFavorite(slug);
     }
 
     @Override

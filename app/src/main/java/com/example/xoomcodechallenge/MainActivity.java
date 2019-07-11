@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.xoomcodechallenge.async.LoadRestApiAsyncTask;
 import com.example.xoomcodechallenge.adapter.CountriesAdapter;
+import com.example.xoomcodechallenge.async.UpdateCountryFavoriteAsyncTask;
 import com.example.xoomcodechallenge.db.Country;
 import com.example.xoomcodechallenge.service.CountryService;
 import com.example.xoomcodechallenge.volley.VolleyQueue;
@@ -25,7 +26,7 @@ public class MainActivity extends Activity {
     private static String COUNTRIES_URL = "https://mobile.xoom.com/catalog/v2/countries";
 
     private CountriesAdapter countriesAdapter;
-    private CountryService countryService;
+    private LoadRestApiAsyncTask loadRestApiAsyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +36,15 @@ public class MainActivity extends Activity {
         final RecyclerView countryRecyclerView = findViewById(R.id.countriesRecyclerView);
         countryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        countryService = new CountryService(getApplicationContext());
-        countriesAdapter = new CountriesAdapter(new ArrayList<Country>(), getApplicationContext(), countryListener);
+        final CountryService countryService = new CountryService(getApplicationContext());
+
+        countriesAdapter = new CountriesAdapter(new ArrayList<Country>(), getApplicationContext(), countryListener, countryService);
         countryRecyclerView.setAdapter(countriesAdapter);
 
         final RequestQueue requestQueue = VolleyQueue.getRequestQueue(getApplicationContext());
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, COUNTRIES_URL, null, success, error);
+
+        loadRestApiAsyncTask = new LoadRestApiAsyncTask(countryService, countryListener);
 
         requestQueue.add(jsonObjectRequest);
 
@@ -57,8 +61,7 @@ public class MainActivity extends Activity {
     private Response.Listener<JSONObject> success = new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
-            final LoadRestApiAsyncTask loadRestApiAsyncTask = new LoadRestApiAsyncTask(getApplicationContext(), countryListener, response);
-            loadRestApiAsyncTask.execute();
+            loadRestApiAsyncTask.execute(response);
         }
     };
 
@@ -66,7 +69,6 @@ public class MainActivity extends Activity {
         @Override
         public void onErrorResponse(VolleyError error) {
             Log.e("volley", error.getMessage());
-            final LoadRestApiAsyncTask loadRestApiAsyncTask = new LoadRestApiAsyncTask(getApplicationContext(), countryListener, null);
             loadRestApiAsyncTask.execute();
         }
     };

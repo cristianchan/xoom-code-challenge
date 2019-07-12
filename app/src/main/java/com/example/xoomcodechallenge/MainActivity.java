@@ -9,18 +9,23 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.xoomcodechallenge.async.LoadRestApiAsyncTask;
 import com.example.xoomcodechallenge.adapter.CountriesAdapter;
-import com.example.xoomcodechallenge.async.UpdateCountryFavoriteAsyncTask;
+import com.example.xoomcodechallenge.async.LoadRestApiAsyncTask;
+import com.example.xoomcodechallenge.db.AppDatabase;
 import com.example.xoomcodechallenge.db.Country;
+import com.example.xoomcodechallenge.db.CountryDao;
+import com.example.xoomcodechallenge.db.DatabaseConfig;
 import com.example.xoomcodechallenge.service.CountryService;
 import com.example.xoomcodechallenge.volley.VolleyQueue;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.android.volley.Request.Method.GET;
+import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
 
 public class MainActivity extends Activity {
     private static String COUNTRIES_URL = "https://mobile.xoom.com/catalog/v2/countries";
@@ -36,7 +41,12 @@ public class MainActivity extends Activity {
         final RecyclerView countryRecyclerView = findViewById(R.id.countriesRecyclerView);
         countryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final CountryService countryService = new CountryService(getApplicationContext());
+        final AppDatabase database = DatabaseConfig.getDatabase(getApplicationContext());
+        final CountryDao countryDao = database.countryDao();
+        final Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES)
+                .create();
+        final CountryService countryService = new CountryService(countryDao, gson);
 
         countriesAdapter = new CountriesAdapter(new ArrayList<Country>(), getApplicationContext(), countryListener, countryService);
         countryRecyclerView.setAdapter(countriesAdapter);
@@ -45,6 +55,7 @@ public class MainActivity extends Activity {
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, COUNTRIES_URL, null, success, error);
 
         loadRestApiAsyncTask = new LoadRestApiAsyncTask(countryService, countryListener);
+
 
         requestQueue.add(jsonObjectRequest);
 

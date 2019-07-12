@@ -16,10 +16,6 @@ public class Country {
 
     private Boolean favorite;
 
-    public void setFavorite(Boolean favorite) {
-        this.favorite = favorite;
-    }
-
     public Country(String slug, String name, String flagPath, Boolean favorite) {
         this.slug = slug;
         this.name = name;
@@ -41,6 +37,22 @@ public class Country {
 
     public Boolean isFavorite() {
         return favorite;
+    }
+
+    public void setSlug(@NotNull String slug) {
+        this.slug = slug;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setFlagPath(String flagPath) {
+        this.flagPath = flagPath;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
     }
 
 }

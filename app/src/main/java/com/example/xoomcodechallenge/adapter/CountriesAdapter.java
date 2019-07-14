@@ -78,12 +78,6 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
         countries.addAll(newCountries);
     }
 
-    private void updateFavorites(final Country country) {
-        country.setFavorite(!country.isFavorite());
-        Collections.sort(countries, countryComparator);
-        notifyDataSetChanged();
-    }
-
     public static class CountriesViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTextView;
         private ImageView favBtn;
@@ -103,6 +97,11 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
         public ImageView getFavBtn() {
             return favBtn;
         }
+    }
 
+    private void updateFavorites(final Country country) {
+        country.setFavorite(!country.isFavorite());
+        Collections.sort(countries, countryComparator);
+        notifyDataSetChanged();
     }
 }

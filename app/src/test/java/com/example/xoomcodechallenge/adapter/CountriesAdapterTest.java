@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ApplicationProvider;
 import com.example.xoomcodechallenge.MainActivity;
 import com.example.xoomcodechallenge.R;
+import com.example.xoomcodechallenge.async.TaskFactory;
+import com.example.xoomcodechallenge.async.UpdateCountryFavoriteAsyncTask;
 import com.example.xoomcodechallenge.db.Country;
 import com.example.xoomcodechallenge.service.CountryComparator;
 import com.example.xoomcodechallenge.service.CountryService;
@@ -20,10 +22,9 @@ import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(RobolectricTestRunner.class)
 public class CountriesAdapterTest {
@@ -80,15 +81,10 @@ public class CountriesAdapterTest {
         subject.onBindViewHolder(holder, 0);
 
         assertThat(holder.getNameTextView().getText().toString(), is("United States"));
-
-        holder.getFavBtn().performClick();
-
-        //verify(UpdateCountryFavoriteAsyncTask.class).execute("US");
     }
 
     private Country getCountry() {
         final Country country = new Country("US", "United States", null, false);
         return country;
     }
-
 }

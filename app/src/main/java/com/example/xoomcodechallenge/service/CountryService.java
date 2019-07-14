@@ -3,7 +3,6 @@ package com.example.xoomcodechallenge.service;
 import android.util.Log;
 import com.example.xoomcodechallenge.db.Country;
 import com.example.xoomcodechallenge.db.CountryDao;
-import com.example.xoomcodechallenge.db.CountryRepository;
 import com.example.xoomcodechallenge.response.CountryResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

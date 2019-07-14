@@ -3,6 +3,7 @@ package com.example.xoomcodechallenge.service;
 import android.util.Log;
 import com.example.xoomcodechallenge.db.Country;
 import com.example.xoomcodechallenge.db.CountryDao;
+import com.example.xoomcodechallenge.db.CountryRepository;
 import com.example.xoomcodechallenge.response.CountryResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -10,15 +11,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.lang.reflect.Type;
 import java.util.List;
 
-
-
+@Singleton
 public class CountryService {
     private final CountryDao countryDao;
-    private final Gson gson;
+    private Gson gson;
 
+    @Inject
     public CountryService(CountryDao countryDao, Gson gson) {
         this.countryDao = countryDao;
         this.gson = gson;

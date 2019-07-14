@@ -1,6 +1,5 @@
 package com.example.xoomcodechallenge.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,35 +8,34 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.xoomcodechallenge.R;
-import com.example.xoomcodechallenge.async.UpdateCountryFavoriteAsyncTask;
+import com.example.xoomcodechallenge.async.TaskFactory;
 import com.example.xoomcodechallenge.db.Country;
+import com.example.xoomcodechallenge.service.CountryComparator;
 import com.example.xoomcodechallenge.service.CountryService;
 import com.squareup.picasso.Picasso;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import static com.example.xoomcodechallenge.MainActivity.CountryListener;
-
+@Singleton
 public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.CountriesViewHolder> {
     private static String FLAG_URL = "https://www.countryflags.io/%s/flat/64.png";
 
     private final List<Country> countries;
-    private final Context context;
-    private final CountryListener countryListener;
-    private final CountryService countryService;
+    private final CountryComparator countryComparator;
     private final Picasso picasso;
+    private final CountryService countryService;
 
-    private  UpdateCountryFavoriteAsyncTask updateCountryFavoriteAsyncTask;
-
-    public CountriesAdapter(final List<Country> countries,
-                            final Context applicationContext,
-                            final CountryListener countryListener,
-                            final CountryService countryService,
-                            final Picasso picasso) {
-        this.context = applicationContext;
-        this.countries = countries;
-        this.countryListener = countryListener;
+    @Inject
+    public CountriesAdapter(final CountryComparator countryComparator,
+                            final Picasso picasso,
+                            final CountryService countryService) {
         this.countryService = countryService;
+        this.countries = new ArrayList<>();
+        this.countryComparator = countryComparator;
         this.picasso = picasso;
     }
 
@@ -45,8 +43,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
     @Override
     public CountriesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.country_item, null);
-        final CountriesViewHolder countriesViewHolder = new CountriesViewHolder(view);
-        return countriesViewHolder;
+        return new CountriesViewHolder(view);
     }
 
     @Override
@@ -65,8 +62,8 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
         holder.favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateCountryFavoriteAsyncTask = new UpdateCountryFavoriteAsyncTask(countryService, countryListener);
-                updateCountryFavoriteAsyncTask.execute(country.getSlug());
+                TaskFactory.getUpdateCountryFavoriteAsyncTask(countryService).execute(country.getSlug());
+                updateFavorites(country);
             }
         });
     }
@@ -79,6 +76,12 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
     public void setItems(final List<Country> newCountries) {
         countries.clear();
         countries.addAll(newCountries);
+    }
+
+    private void updateFavorites(final Country country) {
+        country.setFavorite(!country.isFavorite());
+        Collections.sort(countries, countryComparator);
+        notifyDataSetChanged();
     }
 
     public static class CountriesViewHolder extends RecyclerView.ViewHolder {
@@ -101,8 +104,5 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
             return favBtn;
         }
 
-        public ImageView getFlag() {
-            return flag;
-        }
     }
 }

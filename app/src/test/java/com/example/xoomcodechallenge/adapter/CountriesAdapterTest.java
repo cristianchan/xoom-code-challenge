@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ApplicationProvider;
 import com.example.xoomcodechallenge.MainActivity;
 import com.example.xoomcodechallenge.R;
-import com.example.xoomcodechallenge.async.UpdateCountryFavoriteAsyncTask;
 import com.example.xoomcodechallenge.db.Country;
+import com.example.xoomcodechallenge.service.CountryComparator;
 import com.example.xoomcodechallenge.service.CountryService;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -19,13 +19,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
-import java.util.ArrayList;
-
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -38,9 +35,6 @@ public class CountriesAdapterTest {
     private Context mainView;
 
     @Mock
-    private MainActivity.CountryListener countryListener;
-
-    @Mock
     private CountryService countryService;
 
     @Mock
@@ -50,35 +44,34 @@ public class CountriesAdapterTest {
     private RequestCreator requestCreator;
 
     @Mock
-    private UpdateCountryFavoriteAsyncTask updateCountryFavoriteAsyncTask;
-
+    private CountryComparator countryComparator;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         mainView = new MainActivity();
-        subject = new CountriesAdapter(new ArrayList<Country>(), mainView, countryListener, countryService, picasso);
+        subject = new CountriesAdapter(countryComparator, picasso, countryService);
     }
 
     @Test
-    public void onCreateViewHolder_WithNewMainView_ViewHolder(){
-        final CountriesAdapter.CountriesViewHolder countriesViewHolder = subject.onCreateViewHolder(new RecyclerView(ApplicationProvider.getApplicationContext()),0);
+    public void onCreateViewHolder_WithNewMainView_ViewHolder() {
+        final CountriesAdapter.CountriesViewHolder countriesViewHolder = subject.onCreateViewHolder(new RecyclerView(ApplicationProvider.getApplicationContext()), 0);
         assertThat(countriesViewHolder, is(notNullValue()));
     }
 
     @Test
     public void getItemCount_WithCountries_ItemCount() {
         subject.setItems(asList(getCountry(), getCountry(), getCountry()));
-        assertThat(subject.getItemCount() , is(3));
+        assertThat(subject.getItemCount(), is(3));
     }
 
     @Test
     public void onBindViewHolder_setsTextAndClickEventForCandyView() {
-        final String url  = String.format(FLAG_URL, "us");
+        final String url = String.format(FLAG_URL, "us");
 
         subject.setItems(asList(getCountry()));
 
-        LayoutInflater inflater = (LayoutInflater)  ApplicationProvider.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) ApplicationProvider.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View listItemView = inflater.inflate(R.layout.country_item, null, false);
         holder = new CountriesAdapter.CountriesViewHolder(listItemView);
 
@@ -86,15 +79,15 @@ public class CountriesAdapterTest {
 
         subject.onBindViewHolder(holder, 0);
 
-        assertThat(holder.getNameTextView().getText().toString() , is("United States"));
+        assertThat(holder.getNameTextView().getText().toString(), is("United States"));
 
         holder.getFavBtn().performClick();
 
         //verify(UpdateCountryFavoriteAsyncTask.class).execute("US");
     }
 
-    private Country getCountry(){
-        final Country country = new Country("US", "United States", null , false);
+    private Country getCountry() {
+        final Country country = new Country("US", "United States", null, false);
         return country;
     }
 

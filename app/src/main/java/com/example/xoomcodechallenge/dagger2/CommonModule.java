@@ -1,6 +1,8 @@
 package com.example.xoomcodechallenge.dagger2;
 
 import android.app.Application;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
@@ -25,5 +27,12 @@ public class CommonModule {
     @Singleton
     Picasso providesPicasso(final Application application) {
         return new Picasso.Builder(application.getApplicationContext()).build();
+    }
+
+
+    @Provides
+    @Singleton
+    RequestQueue providesRequestQueue(final Application application) {
+        return Volley.newRequestQueue(application.getApplicationContext());
     }
 }

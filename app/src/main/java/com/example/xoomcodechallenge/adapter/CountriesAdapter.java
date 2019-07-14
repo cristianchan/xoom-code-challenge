@@ -25,17 +25,20 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
     private final Context context;
     private final CountryListener countryListener;
     private final CountryService countryService;
+    private final Picasso picasso;
 
     private  UpdateCountryFavoriteAsyncTask updateCountryFavoriteAsyncTask;
 
     public CountriesAdapter(final List<Country> countries,
                             final Context applicationContext,
                             final CountryListener countryListener,
-                            final CountryService countryService) {
+                            final CountryService countryService,
+                            final Picasso picasso) {
         this.context = applicationContext;
         this.countries = countries;
         this.countryListener = countryListener;
         this.countryService = countryService;
+        this.picasso = picasso;
     }
 
     @NonNull
@@ -56,7 +59,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
             holder.favBtn.setImageResource(R.drawable.star_outline);
         }
 
-        Picasso.with(context).load(String.format(FLAG_URL, country.getSlug().toLowerCase())).into(holder.flag);
+        picasso.load(String.format(FLAG_URL, country.getSlug().toLowerCase())).into(holder.flag);
 
         holder.nameTextView.setText(country.getName());
         holder.favBtn.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +81,7 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
         countries.addAll(newCountries);
     }
 
-    public class CountriesViewHolder extends RecyclerView.ViewHolder {
+    public static class CountriesViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTextView;
         private ImageView favBtn;
         private ImageView flag;
@@ -88,6 +91,18 @@ public class CountriesAdapter extends RecyclerView.Adapter<CountriesAdapter.Coun
             this.nameTextView = itemView.findViewById(R.id.nameTextView);
             this.favBtn = itemView.findViewById(R.id.favBtn);
             this.flag = itemView.findViewById(R.id.flag);
+        }
+
+        public TextView getNameTextView() {
+            return nameTextView;
+        }
+
+        public ImageView getFavBtn() {
+            return favBtn;
+        }
+
+        public ImageView getFlag() {
+            return flag;
         }
     }
 }

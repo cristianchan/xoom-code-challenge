@@ -19,6 +19,7 @@ import com.example.xoomcodechallenge.service.CountryService;
 import com.example.xoomcodechallenge.volley.VolleyQueue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -48,7 +49,9 @@ public class MainActivity extends Activity {
                 .create();
         final CountryService countryService = new CountryService(countryDao, gson);
 
-        countriesAdapter = new CountriesAdapter(new ArrayList<Country>(), getApplicationContext(), countryListener, countryService);
+        final Picasso picasso = new Picasso.Builder(getApplicationContext()).build();
+
+        countriesAdapter = new CountriesAdapter(new ArrayList<Country>(), getApplicationContext(), countryListener, countryService , picasso);
         countryRecyclerView.setAdapter(countriesAdapter);
 
         final RequestQueue requestQueue = VolleyQueue.getRequestQueue(getApplicationContext());
